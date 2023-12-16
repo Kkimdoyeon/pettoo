@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 
-import model.Diary.*;
-import model.Diary;
+import model.DiaryDto.*;
+import model.DiaryDto;
 import model.dao.JDBCUtil;
 
 public class DiaryDAO {
@@ -25,7 +25,7 @@ public class DiaryDAO {
 	         "DIARY.PLACE ";
 	
 	//해당 userId의 diary 를 리스트로 반환
-	public List<Diary> getDiaryListByUserId(int userId) {
+	public List<DiaryDto> getDiaryListByUserId(int userId) {
 		String allQuery = query + ", " + "FROM Diary WHERE userId = ?";
 			
 		Object[] param = new Object[] {userId};
@@ -33,9 +33,9 @@ public class DiaryDAO {
 		
 		try { 
 			ResultSet rs = jdbcUtil.executeQuery();		
-			List<Diary> list = new ArrayList<Diary>();
+			List<DiaryDto> list = new ArrayList<DiaryDto>();
 			while (rs.next()) {	
-				Diary dto = new Diary();		// 하나의 StudentDTO 객체 생성 후 정보 설정
+				DiaryDto dto = new DiaryDto();		// 하나의 StudentDTO 객체 생성 후 정보 설정
 				dto.setPhoto(rs.getBytes("PHOTO"));
 				dto.setDiaryTit(rs.getString("D_TITLE"));
 				dto.setDate(rs.getDate("DATE"));
@@ -55,7 +55,7 @@ public class DiaryDAO {
 	}
 
 	//Diary 객체에 담겨있는 일기장 정보를 기반으로 일기장 정보를 Diary table에 삽입하는 메소드
-	public int insertDiary(Diary dto) {
+	public int insertDiary(DiaryDto dto) {
 		int result = 0;
 		String insertQuery = "INSERT INTO DIARY (D_TITLE, PHOTO, DATE, WALKINGTIME, D_TEXT, USERID, PLACE) " +
 				 "VALUES (?, ?, ?, ?, ?, ?, ?) ";

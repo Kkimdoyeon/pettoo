@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 커뮤티니 관리를 위해 필요한 도메인 클래스. Community 테이블과 대응됨
  */
-public class Community {
+public class CommunityDto {
 	private int id;
 	private String name;
 	private String description;
@@ -14,11 +14,11 @@ public class Community {
 	private String chairId;
 	private String chairName;
 	private int numOfMembers;
-	private List<User> memberList;
+	private List<UserDto> memberList;
 
-	public Community() { }		// 기본 생성자
+	public CommunityDto() { }		// 기본 생성자
 	
-	public Community(int id, String name, String description, Date startDate, String chairId, String chairName) {
+	public CommunityDto(int id, String name, String description, Date startDate, String chairId, String chairName) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -29,7 +29,7 @@ public class Community {
 		this.setNumOfMembers(0);
 	}
 	
-	public Community(int id, String name, String description, int numOfMembers) {
+	public CommunityDto(int id, String name, String description, int numOfMembers) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -93,11 +93,11 @@ public class Community {
 		this.numOfMembers = numOfMembers;
 	}
 
-	public List<User> getMemberList() {
+	public List<UserDto> getMemberList() {
 		return memberList;
 	}
 
-	public void setMemberList(List<User> memberList) {
+	public void setMemberList(List<UserDto> memberList) {
 		this.memberList = memberList;
 	}
 

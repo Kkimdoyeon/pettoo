@@ -13,7 +13,7 @@ public class CreateCommunityController implements Controller {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	Community comm = new Community(
+    	CommunityDto comm = new CommunityDto(
     		0, request.getParameter("name"),
 			request.getParameter("desc"),
 			null, null, null);		

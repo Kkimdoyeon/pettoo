@@ -3,7 +3,7 @@ package model;
 /**
  * 사용자 관리를 위해 필요한 도메인 클래스. USERINFO 테이블과 대응됨
  */
-public class User {
+public class UserDto {
 	private String userId;
 	private String password;
 	private String name;
@@ -17,9 +17,9 @@ public class User {
 	private String commName;
 	private UserInfo[] friends = new UserInfo[100]; //최대 친구 수를 100명으로 제한
 
-	public User() { }		// 기본 생성자
+	public UserDto() { }		// 기본 생성자
 	
-	public User(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId) {
+	public UserDto(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId) {
 		this.userId = userId;
 		this.password = password;
 		this.name = name;
@@ -32,12 +32,12 @@ public class User {
 		this.commId = commId;
 	}
 	
-	public User(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId, String commName) {
+	public UserDto(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId, String commName) {
 		this(userId, password, name, email, gender, address, userBirth, petID, phone, commId);
 		this.commName = commName;
 	}
 
-	public User(String userId, String address, String gender, String name, String email, String phone, String userBirth,int petID) {
+	public UserDto(String userId, String address, String gender, String name, String email, String phone, String userBirth,int petID) {
 		this.userId = userId;
 		this.address = address;
 		this.gender = gender;

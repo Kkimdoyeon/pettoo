@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Diary {
+public class DiaryDto {
     private byte[] photo;   // 사진을 저장하는 필드
     private String diaryTit; // 제목을 저장하는 필드
     private Date date;       // 날짜를 저장하는 필드
@@ -24,8 +24,8 @@ public class Diary {
 		this.walkingTime = walkingTime;
 	}
 	// 생성자
-    public Diary() {}
-    public Diary(byte[] photo, String diaryTit, Date date, String diaryText, String userId, int walkingTime, String place) {
+    public DiaryDto() {}
+    public DiaryDto(byte[] photo, String diaryTit, Date date, String diaryText, String userId, int walkingTime, String place) {
         this.photo = photo;
         this.diaryTit = diaryTit;
         this.date = date;

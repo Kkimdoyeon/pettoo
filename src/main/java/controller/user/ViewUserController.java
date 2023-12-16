@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import controller.Controller;
 import model.service.UserManager;
 import model.service.UserNotFoundException;
-import model.User;
+import model.UserDto;
 
 public class ViewUserController implements Controller {
     @Override
@@ -19,7 +19,7 @@ public class ViewUserController implements Controller {
 		UserManager manager = UserManager.getInstance();
 		String userId = request.getParameter("userId");
 		
-    	User user = null;
+    	UserDto user = null;
 		try {
 			user = manager.findUser(userId);	// 사용자 정보 검색
 		} catch (UserNotFoundException e) {				

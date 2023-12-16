@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.User;
+import model.UserDto;
 
 /**
  * 사용자 관리를 위해 데이터베이스 작업을 전담하는 DAO 클래스
@@ -20,7 +20,7 @@ public class UserDAO {
 	/**
 	 * 사용자 관리 테이블에 새로운 사용자 생성.
 	 */
-	public int create(User user) throws SQLException {
+	public int create(UserDto user) throws SQLException {
 		String sql = "INSERT INTO USERINFO VALUES (?, ?, ?, ?, ?, ?)";		
 		Object[] param = new Object[] {user.getUserId(), user.getPassword(), 
 						user.getName(), user.getEmail(), user.getPhone(), 
@@ -43,7 +43,7 @@ public class UserDAO {
 	/**
 	 * 기존의 사용자 정보를 수정.
 	 */
-	public int update(User user) throws SQLException {
+	public int update(UserDto user) throws SQLException {
 		String sql = "UPDATE USERINFO "
 					+ "SET password=?, name=?, email=?, phone=?, commId=? "
 					+ "WHERE userid=?";
@@ -92,7 +92,7 @@ public class UserDAO {
 	 * 주어진 사용자 ID에 해당하는 사용자 정보를 데이터베이스에서 찾아 User 도메인 클래스에 
 	 * 저장하여 반환.
 	 */
-	public User findUser(String userId) throws SQLException {
+	public UserDto findUser(String userId) throws SQLException {
         String sql = "SELECT password, name, email, phone, commId, cName "
         			+ "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
         			+ "WHERE userid=? ";              
@@ -101,7 +101,7 @@ public class UserDAO {
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
 			if (rs.next()) {						// 학생 정보 발견
-				User user = new User(		// User 객체를 생성하여 학생 정보를 저장
+				UserDto user = new UserDto(		// User 객체를 생성하여 학생 정보를 저장
 						rs.getString("userID"),
 						rs.getString("Name"),
 						rs.getString("address"),
@@ -123,7 +123,7 @@ public class UserDAO {
 	/**
 	 * 전체 사용자 정보를 검색하여 List에 저장 및 반환
 	 */
-	public List<User> findUserList() throws SQLException {
+	public List<UserDto> findUserList() throws SQLException {
         String sql = "SELECT userId, name, email, NVL(commId,0) AS commId, cName " 
         		   + "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
         		   + "ORDER BY userId";
@@ -131,9 +131,9 @@ public class UserDAO {
 					
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();			// query 실행			
-			List<User> userList = new ArrayList<User>();	// User들의 리스트 생성
+			List<UserDto> userList = new ArrayList<UserDto>();	// User들의 리스트 생성
 			while (rs.next()) {
-				User user = new User(			// User 객체를 생성하여 현재 행의 정보를 저장
+				UserDto user = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
 					rs.getString("userId"),
 					null,
 					rs.getString("name"),
@@ -157,7 +157,7 @@ public class UserDAO {
 	 * 전체 사용자 정보를 검색한 후 현재 페이지와 페이지당 출력할 사용자 수를 이용하여
 	 * 해당하는 사용자 정보만을 List에 저장하여 반환.
 	 */
-	public List<User> findUserList(int currentPage, int countPerPage) throws SQLException {
+	public List<UserDto> findUserList(int currentPage, int countPerPage) throws SQLException {
 		String sql = "SELECT userId, name, email, NVL(commId, 0) AS commId, cName " 
 					+ "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
 					+ "ORDER BY userId";
@@ -169,9 +169,9 @@ public class UserDAO {
 			ResultSet rs = jdbcUtil.executeQuery();				// query 실행			
 			int start = ((currentPage-1) * countPerPage) + 1;	// 출력을 시작할 행 번호 계산
 			if ((start >= 0) && rs.absolute(start)) {			// 커서를 시작 행으로 이동
-				List<User> userList = new ArrayList<User>();	// User들의 리스트 생성
+				List<UserDto> userList = new ArrayList<UserDto>();	// User들의 리스트 생성
 				do {
-					User user = new User(			// User 객체를 생성하여 현재 행의 정보를 저장
+					UserDto user = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
 							rs.getString("userID"),
 							rs.getString("password"),
 							rs.getString("Name"),
@@ -198,16 +198,16 @@ public class UserDAO {
 	/**
 	 * 특정 커뮤니티에 속한 사용자들을 검색하여 List에 저장 및 반환
 	 */
-	public List<User> findUsersInCommunity(int communityId) throws SQLException {
+	public List<UserDto> findUsersInCommunity(int communityId) throws SQLException {
         String sql = "SELECT userId, name, email, phone FROM UserInfo "
      				+ "WHERE commId = ?";                         
 		jdbcUtil.setSqlAndParameters(sql, new Object[] {communityId});	// JDBCUtil에 query문과 매개 변수 설정
 		
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
-			List<User> memList = new ArrayList<User>();	// member들의 리스트 생성
+			List<UserDto> memList = new ArrayList<UserDto>();	// member들의 리스트 생성
 			while (rs.next()) {
-				User member = new User(			// User 객체를 생성하여 현재 행의 정보를 저장
+				UserDto member = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
 						rs.getString("userID"),
 						rs.getString("Name"),
 						rs.getString("address"),
