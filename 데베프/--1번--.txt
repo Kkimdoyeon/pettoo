@@ -1,0 +1,50 @@
+--1번--
+create table emp0761 as
+select empno, ename, dname,sal, comm, mgr, hiredate 
+from emp e join d on e.deptno = d.deptno
+where dame = 'RESEARCH';
+
+--2번--
+insert into emp0761 (empno, ename, dname, sal, hiredate) 
+values (7999, 'JULIE', 'RESEARCH', 1000, SYSDATE);
+
+select * from emp0761;
+
+--3번--
+insert into emp0761
+    select empno, ename, dname,sal, comm, mgr, hiredate 
+    from dept30
+    
+update emp0761
+    set comm = sal*0.05
+    where sal = null;
+    
+--4번--
+update emp0761
+    set mgr = (select mgr where ename = 'FORD')
+    where ename = 'JULIE';
+
+--5번--
+select hiredate, ADD_MONTHS(hiredate, 20)
+from dept0761
+
+--6번--
+alter table dept0761
+    modify empno constraint mgr not null;
+
+--7번--
+create sequence empno_seq0761 
+increment by 10
+start with 8000
+maxvalue 9000;
+
+insert into emp0761(empno, ename, sal, hiredate)
+values (empno_seq0761.nextval, 'JULIE123', 4000, SYSDATE);
+
+select * from emp0761;
+
+
+--8번--
+select empno, ename, hiredate 
+from dept = 'RESEARCH'
+where rownum <= 4;
