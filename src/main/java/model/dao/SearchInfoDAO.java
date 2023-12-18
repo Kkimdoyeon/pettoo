@@ -1,13 +1,10 @@
 package model.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class SearchInfoDAO {
@@ -43,7 +40,7 @@ public class SearchInfoDAO {
 		ResultSet rs = null;
 		
 		StringBuilder query = new StringBuilder();
-		query.append("SELECT userId, userName, address, gender, email, phoneNumber, userBirth, petId ");
+		query.append("SELECT userId, userPw, userName, address, gender, email, phoneNumber, userBirth, petId, comm_num ");
 		query.append("FROM USERINFO ");
 		query.append("WHERE userId = ? ");
 		
@@ -54,15 +51,18 @@ public class SearchInfoDAO {
 			rs = pStmt.executeQuery();
 			
 			while (rs.next()) {
+				String userPw = rs.getString("userPw");
 				String userName = rs.getString("userName");
 				String address = rs.getString("address");
 				String gender = rs.getString("gender");
-				String petId = rs.getString("petId");
 				String email = rs.getString("email");
 				String phone = rs.getString("phoneNumber");
 				String birth = rs.getString("userBirth");
+				String petId = rs.getString("petId");
+				int commNum = rs.getInt("comm_num");
 				
 				System.out.println("아이디: "+ userId);
+				System.out.println("비밀번호: "+ userPw);
 				System.out.println("이름: "+ userName);
 				System.out.println("성별: "+ gender);
 				System.out.println("생년월일: "+ birth);
@@ -70,6 +70,7 @@ public class SearchInfoDAO {
 				System.out.println("전화번호: "+ phone);
 				System.out.println("주소: "+ address);
 				System.out.println("반려동물: "+ petId);
+				System.out.println("커뮤니티: "+ commNum);
 			}
 			System.out.println();
 		} catch (SQLException ex) {
@@ -133,7 +134,10 @@ public class SearchInfoDAO {
 				} catch (SQLException ex) { ex.printStackTrace(); }
 		}
 	}
+	
+	
 
+	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		
