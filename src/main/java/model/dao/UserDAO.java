@@ -59,8 +59,7 @@ public class UserDAO {
 		} catch (Exception ex) {
 			jdbcUtil.rollback();
 			ex.printStackTrace();
-		}
-		finally {
+		} finally {
 			jdbcUtil.commit();
 			jdbcUtil.close();	// resource 반환
 		}		
@@ -70,7 +69,7 @@ public class UserDAO {
 	/**
 	 * 사용자 ID에 해당하는 사용자를 삭제.
 	 */
-	public int remove(String userId) throws SQLException {
+	public int delete(String userId) throws SQLException {
 		String sql = "DELETE FROM USERINFO WHERE userid=?";		
 		jdbcUtil.setSqlAndParameters(sql, new Object[] {userId});	// JDBCUtil에 delete문과 매개 변수 설정
 
@@ -80,8 +79,7 @@ public class UserDAO {
 		} catch (Exception ex) {
 			jdbcUtil.rollback();
 			ex.printStackTrace();
-		}
-		finally {
+		} finally {
 			jdbcUtil.commit();
 			jdbcUtil.close();	// resource 반환
 		}		

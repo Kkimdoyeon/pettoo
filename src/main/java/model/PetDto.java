@@ -1,27 +1,27 @@
 package model;
 
 public class PetDto {
+	private String petId;
 	private String petName;
 	private String userId;
 	private String petGender;
-	private String petData;
 	private String petSpecies;
-	private int petHeight;
-	private int petWeight;
-	private String petId;
+	private float petHeight;
+	private float petWeight;
+	private String petImage;
 	
 	//생성자
 	public PetDto() {};
 	
-	public PetDto(String name, String uId, String gen, String data, String species, int height, int weight, String pId) {
+	public PetDto(String pId, String name, String uId, String gen, String species, float height, float weight, String image) {
+		this.petId = pId;
 		this.petName = name;
 		this.userId = uId;
 		this.petGender = gen;
-		this.petData = data;
 		this.petSpecies = species;
 		this.petHeight = height;
 		this.petWeight = weight;
-		this.petId = pId;
+		this.petImage = image;
 	}
 
 	//getter & setter
@@ -43,11 +43,11 @@ public class PetDto {
 	public void setPetGender(String petGender) {
 		this.petGender = petGender;
 	}
-	public String getPetData() {
-		return petData;
+	public String getpetImage() {
+		return petImage;
 	}
-	public void setPetData(String petData) {
-		this.petData = petData;
+	public void setpetImage(String petImage) {
+		this.petImage = petImage;
 	}
 	public String getPetSpecies() {
 		return petSpecies;
@@ -55,13 +55,13 @@ public class PetDto {
 	public void setPetSpecies(String petSpecies) {
 		this.petSpecies = petSpecies;
 	}
-	public int getPetHeight() {
+	public float getPetHeight() {
 		return petHeight;
 	}
 	public void setPetHeight(int petHeight) {
 		this.petHeight = petHeight;
 	}
-	public int getPetWeight() {
+	public float getPetWeight() {
 		return petWeight;
 	}
 	public void setPetWeight(int petWeight) {
