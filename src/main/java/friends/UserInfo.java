@@ -1,37 +1,36 @@
 package friends;
 
 public class UserInfo {
-	private int userID;
+	private String userId;
 	private String userName;
 	private String address;
 	private String gender;
 	private String email;
 	private String phoneNumber;
 	private String userBirth;
-	private int petID;
-	private UserInfo[] friends = new UserInfo[100]; //최대 친구 수를 100명으로 제한
+	private String petId;
 	
 	
 	//생성자
 	public UserInfo() {}; //기본 생성자
 	
-	public UserInfo(int userID, String userName, String address, String gender, String email, String phoneNumber, String userBirth, int petID) {
-		this.userID = userID;
+	public UserInfo(String userId, String userName, String address, String gender, String email, String phoneNumber, String userBirth, String petId) {
+		this.userId = userId;
 		this.userName = userName;
 		this.address = address;
 		this.gender = gender;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.userBirth = userBirth;
-		this.petID = petID;
+		this.petId = petId;
 	}
 	
 	//getter & setter
-	public int getUserID() {
-		return userID;
+	public String getUserId() {
+		return userId;
 	}
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUserID(String userId) {
+		this.userId = userId;
 	}
 	public String getUserName() {
 		return userName;
@@ -69,11 +68,11 @@ public class UserInfo {
 	public void setUserBirth(String userBirth) {
 		this.userBirth = userBirth;
 	}
-	public int getPetID() {
-		return petID;
+	public String getPetId() {
+		return petId;
 	}
-	public void setPetID(int petID) {
-		this.petID = petID;
+	public void setPetId(String petId) {
+		this.petId = petId;
 	}
 
 }
