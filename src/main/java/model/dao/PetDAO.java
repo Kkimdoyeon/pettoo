@@ -1,5 +1,6 @@
 package model.dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.PetDto;
 
@@ -67,6 +68,25 @@ public class PetDAO {
 			jdbcUtil.close();
 		}
 		return 0;
+	}
+	
+	//주어진 petId에 해당하는 펫이 존재하는지 검사
+	public boolean existingPet(String petId) throws SQLException {
+		String sql = "SELECT count(*) FROM PETINFO WHERE petId=?";
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {petId});
+		
+		try {
+			ResultSet rs = jdbcUtil.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				return (count == 1 ? true : false);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			jdbcUtil.close();
+		}
+		return false;
 	}
 
 }

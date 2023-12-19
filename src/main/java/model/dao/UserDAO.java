@@ -4,6 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import controller.user.LoginController;
 import model.UserDto;
 
 /**
@@ -12,7 +17,7 @@ import model.UserDto;
  */
 public class UserDAO {
 	private JDBCUtil jdbcUtil = null;
-	
+	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 	public UserDAO() {			
 		jdbcUtil = new JDBCUtil();	// JDBCUtil 객체 생성
 	}
@@ -93,14 +98,15 @@ public class UserDAO {
 	public UserDto findUser(String userId) throws SQLException {
         String sql = "SELECT userPw, userName, address, gender, email, phoneNumber, userBirth, petId, comm_num "
         			+ "FROM userinfo "
-        			+ "WHERE userid=? ";              
+        			+ "WHERE userId=? ";  
+        logger.info(sql+"-----------------");
 		jdbcUtil.setSqlAndParameters(sql, new Object[] {userId});	// JDBCUtil에 query문과 매개 변수 설정
 
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
 			if (rs.next()) {						// 유저 정보 발견
 				UserDto user = new UserDto(		// User 객체를 생성하여 학생 정보를 저장
-						rs.getString("userID"),
+						userId,
 						rs.getString("userPw"),
 						rs.getString("userName"),
 						rs.getString("address"),

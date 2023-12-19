@@ -28,7 +28,7 @@ public class DeleteUserController implements Controller {
 			(!UserSessionUtils.isLoginUser("admin", session) &&  // 로그인한 사용자가 관리자가 아니고 
 			  UserSessionUtils.isLoginUser(deleteId, session))) { // 로그인한 사용자가 삭제 대상인 경우 (자기 자신을 삭제)
 				
-			manager.remove(deleteId);				// 사용자 정보 삭제
+			manager.delete(deleteId);				// 사용자 정보 삭제
 			if (UserSessionUtils.isLoginUser("admin", session))	// 로그인한 사용자가 관리자 	
 				return "redirect:/user/list";		// 사용자 리스트로 이동
 			else 									// 로그인한 사용자는 이미 삭제됨

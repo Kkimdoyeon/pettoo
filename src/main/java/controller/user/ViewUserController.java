@@ -23,10 +23,10 @@ public class ViewUserController implements Controller {
 		try {
 			user = manager.findUser(userId);	// 사용자 정보 검색
 		} catch (UserNotFoundException e) {				
-	        return "redirect:/user/list";
+	        return "redirect:/user/profile";
 		}	
 		
 		request.setAttribute("user", user);		// 사용자 정보 저장				
-		return "/user/view.jsp";				// 사용자 보기 화면으로 이동
+		return "/user/profile.jsp";				// 사용자 보기 화면으로 이동
     }
 }
