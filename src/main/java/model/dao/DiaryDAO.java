@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.*;
 import model.DiaryDto;
 import model.dao.JDBCUtil;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 public class DiaryDAO {
 	private JDBCUtil jdbcUtil = null;
@@ -61,13 +65,24 @@ public class DiaryDAO {
 		  String sql = "UPDATE DIARY " 
 		       + "SET photo=?, diaryDate=?, diaryText=?, userId=?, walkingTime=?, place=?"
 		       + "WHERE diaryTit=?";
-		  Object[] param = new Object[] {diary.getPhoto(), diary.getDiaryTit(),
-		       diary.getDiaryDate(), diary.getDiaryText(), diary.getUserId(), diary.getWalkingTime(), diary.getPlace()};
+		  
+		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd");  // 주의: 월은 대문자 MM, 분은 소문자 mm
+          Date utilDate = null;
+		try {
+			utilDate = df.parse(diary.getDiaryDate());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}            // String --> java.util.Date 변환
+          
+          
+		  Object[] param = new Object[] {diary.getPhoto(), 
+				  new java.sql.Date(utilDate.getTime()), diary.getDiaryText(), diary.getUserId(), diary.getWalkingTime(), diary.getPlace(), diary.getDiaryTit()};
 
 		  jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil에 update문과 매개 변수 설정
 		         
 		      try {            
-		         int result = jdbcUtil.executeUpdate();   // update 문 실행
+		          int result = jdbcUtil.executeUpdate();   // update 문 실행
 		         return result;
 		      } catch (Exception ex) {
 		         jdbcUtil.rollback();
