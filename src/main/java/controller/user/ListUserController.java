@@ -34,7 +34,7 @@ public class ListUserController implements Controller {
 		request.setAttribute("curUserId", 
 				UserSessionUtils.getLoginUserId(request.getSession()));		
 
-		// 사용자 리스트 화면으로 이동(forwarding)
-		return "/user/list.jsp";        
+		// 마이페이지 화면으로 이동(forwarding)
+		return "/user/myPage.jsp";        
     }
 }

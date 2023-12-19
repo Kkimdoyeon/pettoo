@@ -51,12 +51,16 @@ public class UpdateUserController implements Controller {
     	
     	// POST request (회원정보가 parameter로 전송됨)
     	UserDto updateUser = new UserDto(
-    		request.getParameter("userId"),
-    		request.getParameter("password"),
-    		request.getParameter("name"),
-    		request.getParameter("email"),
-    		request.getParameter("phone"),
-			Integer.parseInt(request.getParameter("commId")));
+    			request.getParameter("userId"),
+    			request.getParameter("userPw"),
+    			request.getParameter("userName"),
+    			request.getParameter("address"),
+    			request.getParameter("gender"),
+    			request.getParameter("email"),
+    			request.getParameter("phoneNumber"),
+    			request.getParameter("userBirth"),
+    			request.getParameter("petId"),
+    			Integer.parseInt(request.getParameter("comm_numm")));
 
     	log.debug("Update User : {}", updateUser);
 

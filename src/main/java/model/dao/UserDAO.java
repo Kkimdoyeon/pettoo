@@ -4,6 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import controller.user.LoginController;
 import model.UserDto;
 
 /**
@@ -12,19 +17,20 @@ import model.UserDto;
  */
 public class UserDAO {
 	private JDBCUtil jdbcUtil = null;
-	
+	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 	public UserDAO() {			
 		jdbcUtil = new JDBCUtil();	// JDBCUtil 객체 생성
 	}
 		
 	/**
-	 * 사용자 관리 테이블에 새로운 사용자 생성.
+	 * userinfo 테이블에 새로운 사용자 추가
 	 */
 	public int create(UserDto user) throws SQLException {
-		String sql = "INSERT INTO USERINFO VALUES (?, ?, ?, ?, ?, ?)";		
-		Object[] param = new Object[] {user.getUserId(), user.getPassword(), 
-						user.getName(), user.getEmail(), user.getPhone(), 
-						(user.getCommId()!=0) ? user.getCommId() : null };				
+		String sql = "INSERT INTO USERINFO VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";		
+		Object[] param = new Object[] {user.getUserId(), user.getuserPw(), user.getUserName(), 
+									user.getAddress(), user.getGender(), user.getEmail(), 
+									user.getPhoneNumber(), user.getUserBirth(), user.getPetId(),
+									(user.getComm_num()!=0) ? user.getComm_num() : null };				
 		jdbcUtil.setSqlAndParameters(sql, param);	// JDBCUtil 에 insert문과 매개 변수 설정
 						
 		try {				
@@ -45,12 +51,11 @@ public class UserDAO {
 	 */
 	public int update(UserDto user) throws SQLException {
 		String sql = "UPDATE USERINFO "
-					+ "SET password=?, name=?, email=?, phone=?, commId=? "
+					+ "SET userPw=?, userName=?, address=?, gender=?, email=?, phoneNumber=?, userBirth=?, petId=?, comm_num=? "
 					+ "WHERE userid=?";
-		Object[] param = new Object[] {user.getPassword(), user.getName(), 
-					user.getEmail(), user.getPhone(), 
-					(user.getCommId()!=0) ? user.getCommId() : null, 
-					user.getUserId()};				
+		Object[] param = new Object[] {user.getuserPw(), user.getUserName(), user.getAddress(), user.getGender(),
+					user.getEmail(), user.getPhoneNumber(), user.getUserBirth(), user.getPetId(), 
+					(user.getComm_num()!=0) ? user.getComm_num() : null, user.getUserId()};				
 		jdbcUtil.setSqlAndParameters(sql, param);	// JDBCUtil에 update문과 매개 변수 설정
 			
 		try {				
@@ -59,8 +64,7 @@ public class UserDAO {
 		} catch (Exception ex) {
 			jdbcUtil.rollback();
 			ex.printStackTrace();
-		}
-		finally {
+		} finally {
 			jdbcUtil.commit();
 			jdbcUtil.close();	// resource 반환
 		}		
@@ -70,7 +74,7 @@ public class UserDAO {
 	/**
 	 * 사용자 ID에 해당하는 사용자를 삭제.
 	 */
-	public int remove(String userId) throws SQLException {
+	public int delete(String userId) throws SQLException {
 		String sql = "DELETE FROM USERINFO WHERE userid=?";		
 		jdbcUtil.setSqlAndParameters(sql, new Object[] {userId});	// JDBCUtil에 delete문과 매개 변수 설정
 
@@ -80,8 +84,7 @@ public class UserDAO {
 		} catch (Exception ex) {
 			jdbcUtil.rollback();
 			ex.printStackTrace();
-		}
-		finally {
+		} finally {
 			jdbcUtil.commit();
 			jdbcUtil.close();	// resource 반환
 		}		
@@ -89,27 +92,30 @@ public class UserDAO {
 	}
 
 	/**
-	 * 주어진 사용자 ID에 해당하는 사용자 정보를 데이터베이스에서 찾아 User 도메인 클래스에 
-	 * 저장하여 반환.
+	 * 주어진 사용자 ID에 해당하는 사용자 정보를 데이터베이스에서 찾아 Userinfo 도메인 클래스에 
+	 * 저장하여 반환. => id로 사용자 검색
 	 */
 	public UserDto findUser(String userId) throws SQLException {
-        String sql = "SELECT password, name, email, phone, commId, cName "
-        			+ "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
-        			+ "WHERE userid=? ";              
+        String sql = "SELECT userPw, userName, address, gender, email, phoneNumber, userBirth, petId, comm_num "
+        			+ "FROM userinfo "
+        			+ "WHERE userId=? ";  
+        logger.info(sql+"-----------------");
 		jdbcUtil.setSqlAndParameters(sql, new Object[] {userId});	// JDBCUtil에 query문과 매개 변수 설정
 
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
-			if (rs.next()) {						// 학생 정보 발견
+			if (rs.next()) {						// 유저 정보 발견
 				UserDto user = new UserDto(		// User 객체를 생성하여 학생 정보를 저장
-						rs.getString("userID"),
-						rs.getString("Name"),
+						userId,
+						rs.getString("userPw"),
+						rs.getString("userName"),
 						rs.getString("address"),
 						rs.getString("gender"),
 						rs.getString("email"),
-						rs.getString("phone"),
+						rs.getString("phoneNumber"),
 						rs.getString("userBirth"),
-						rs.getInt("petID"));
+						rs.getString("petID"),
+						rs.getInt("comm_num"));
 				return user;
 			}
 		} catch (Exception ex) {
@@ -124,8 +130,8 @@ public class UserDAO {
 	 * 전체 사용자 정보를 검색하여 List에 저장 및 반환
 	 */
 	public List<UserDto> findUserList() throws SQLException {
-        String sql = "SELECT userId, name, email, NVL(commId,0) AS commId, cName " 
-        		   + "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
+        String sql = "SELECT userId, userPw, userName, address, gender, email, phoneNumber, userBirth, petId, NVL(comm_num, 0) " 
+        		   + "FROM userinfo "
         		   + "ORDER BY userId";
 		jdbcUtil.setSqlAndParameters(sql, null);		// JDBCUtil에 query문 설정
 					
@@ -133,14 +139,17 @@ public class UserDAO {
 			ResultSet rs = jdbcUtil.executeQuery();			// query 실행			
 			List<UserDto> userList = new ArrayList<UserDto>();	// User들의 리스트 생성
 			while (rs.next()) {
-				UserDto user = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
-					rs.getString("userId"),
-					null,
-					rs.getString("name"),
-					rs.getString("email"),
-					null,
-					rs.getInt("commId"),
-					rs.getString("cName"));
+				UserDto user = new UserDto( 		// User 객체를 생성하여 현재 행의 정보를 저장
+						rs.getString("userID"),
+						rs.getString("userPw"),
+						rs.getString("userName"),
+						rs.getString("address"),
+						rs.getString("gender"),
+						rs.getString("email"),
+						rs.getString("phoneNumber"),
+						rs.getString("userBirth"),
+						rs.getString("petID"),
+						rs.getInt("comm_num"));
 				userList.add(user);				// List에 User 객체 저장
 			}		
 			return userList;					
@@ -158,9 +167,9 @@ public class UserDAO {
 	 * 해당하는 사용자 정보만을 List에 저장하여 반환.
 	 */
 	public List<UserDto> findUserList(int currentPage, int countPerPage) throws SQLException {
-		String sql = "SELECT userId, name, email, NVL(commId, 0) AS commId, cName " 
-					+ "FROM USERINFO u LEFT OUTER JOIN Community c ON u.commId = c.cId "
-					+ "ORDER BY userId";
+		String sql = "SELECT userId, userPw, userName, address, gender, email, phoneNumber, userBirth, petId, NVL(comm_num, 0) " 
+     		   		+ "FROM userinfo "
+     		   		+ "ORDER BY userId";
 		jdbcUtil.setSqlAndParameters(sql, null,					// JDBCUtil에 query문 설정
 				ResultSet.TYPE_SCROLL_INSENSITIVE,				// cursor scroll 가능
 				ResultSet.CONCUR_READ_ONLY);						
@@ -173,16 +182,15 @@ public class UserDAO {
 				do {
 					UserDto user = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
 							rs.getString("userID"),
-							rs.getString("password"),
-							rs.getString("Name"),
-							rs.getString("email"),
-							rs.getString("gender"),
+							rs.getString("userPw"),
+							rs.getString("userName"),
 							rs.getString("address"),
+							rs.getString("gender"),
+							rs.getString("email"),
+							rs.getString("phoneNumber"),
 							rs.getString("userBirth"),
-							rs.getInt("petID"),
-							rs.getString("phone"),
-						rs.getInt("commId"),
-						rs.getString("cName"));
+							rs.getString("petID"),
+							rs.getInt("comm_num"));
 					userList.add(user);							// 리스트에 User 객체 저장
 				} while ((rs.next()) && (--countPerPage > 0));		
 				return userList;							
@@ -198,10 +206,11 @@ public class UserDAO {
 	/**
 	 * 특정 커뮤니티에 속한 사용자들을 검색하여 List에 저장 및 반환
 	 */
-	public List<UserDto> findUsersInCommunity(int communityId) throws SQLException {
-        String sql = "SELECT userId, name, email, phone FROM UserInfo "
-     				+ "WHERE commId = ?";                         
-		jdbcUtil.setSqlAndParameters(sql, new Object[] {communityId});	// JDBCUtil에 query문과 매개 변수 설정
+	public List<UserDto> findUsersInCommunity(int comm_num) throws SQLException {
+        String sql = "SELECT userId, userName, gender, email, petId "
+        			+ "FROM UserInfo "
+     				+ "WHERE comm_num = ?";                         
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {comm_num});	// JDBCUtil에 query문과 매개 변수 설정
 		
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
@@ -209,13 +218,10 @@ public class UserDAO {
 			while (rs.next()) {
 				UserDto member = new UserDto(			// User 객체를 생성하여 현재 행의 정보를 저장
 						rs.getString("userID"),
-						rs.getString("Name"),
-						rs.getString("address"),
+						rs.getString("userName"),
 						rs.getString("gender"),
 						rs.getString("email"),
-						rs.getString("phone"),
-						rs.getString("userBirth"),
-						rs.getInt("petID"));
+						rs.getString("petID"));
 				memList.add(member);			// List에 Community 객체 저장
 			}		
 			return memList;					
@@ -231,10 +237,10 @@ public class UserDAO {
 	/**
 	 * 특정 커뮤니티에 속한 사용자들의 수를 count하여 반환
 	 */
-	public int getNumberOfUsersInCommunity(int communityId) {
-		String sql = "SELECT COUNT(userId) FROM UserInfo "
-     				+ "WHERE commId = ?";              
-		jdbcUtil.setSqlAndParameters(sql, new Object[] {communityId});	// JDBCUtil에 query문과 매개 변수 설정
+	public int getNumberOfUsersInCommunity(int comm_num) {
+		String sql = "SELECT COUNT(userId) FROM userinfo "
+     				+ "WHERE comm_num = ?";              
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {comm_num});	// JDBCUtil에 query문과 매개 변수 설정
 		
 		try {
 			ResultSet rs = jdbcUtil.executeQuery();		// query 실행

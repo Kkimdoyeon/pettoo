@@ -1,156 +1,110 @@
 package model;
 
-/**
- * 사용자 관리를 위해 필요한 도메인 클래스. USERINFO 테이블과 대응됨
- */
 public class UserDto {
 	private String userId;
-	private String password;
-	private String name;
-	private String email;
-	private String gender;
+	private String userPw;
+	private String userName;
 	private String address;
+	private String gender;
+	private String email;
+	private String phoneNumber;
 	private String userBirth;
-	private int petID;
-	private String phone;
-	private int commId;
-	private String commName;
-	private UserInfo[] friends = new UserInfo[100]; //최대 친구 수를 100명으로 제한
-
-	public UserDto() { }		// 기본 생성자
+	private String petId;
+	private int comm_num;
 	
-	public UserDto(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId) {
+	
+	//생성자
+	public UserDto() {}; //기본 생성자
+	
+	//커뮤니티에 속한 멤버 출력용 생성자
+	public UserDto(String userId, String userName, String gender, String email, String petId) {
 		this.userId = userId;
-		this.password = password;
-		this.name = name;
-		this.address = address;
+		this.userName = userName;
 		this.gender = gender;
-		this.userBirth = userBirth;
-		this.petID = petID;
 		this.email = email;
-		this.phone = phone;
-		this.commId = commId;
-	}
-	
-	public UserDto(String userId, String password, String name, String email, String gender, String address, String userBirth, int petID, String phone, int commId, String commName) {
-		this(userId, password, name, email, gender, address, userBirth, petID, phone, commId);
-		this.commName = commName;
+		this.petId = petId;
 	}
 
-	public UserDto(String userId, String address, String gender, String name, String email, String phone, String userBirth,int petID) {
-		this.userId = userId;
+	//전체 생성자
+	public UserDto(String userId, String pw, String userName, String address, String gender, String email, String phoneNumber, String userBirth, String petId, int cNum) {
+		this(userId, userName, gender, email, petId);
+		this.userPw = pw;
 		this.address = address;
-		this.gender = gender;
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
+		this.phoneNumber = phoneNumber;
 		this.userBirth = userBirth;
-		this.petID = petID;
+		this.comm_num = cNum;
 	}
 	
-	/*public void update(User updateUser) {
-        this.password = updateUser.password;
-        this.name = updateUser.name;
-        this.email = updateUser.email;
-        this.phone = updateUser.phone;
-    }*/
 	
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getUserBirth() {
-		return userBirth;
-	}
-
-	public void setUserBirth(String userBirth) {
-		this.userBirth = userBirth;
-	}
-
-	public int getPetID() {
-		return petID;
-	}
-
-	public void setPetID(int petID) {
-		this.petID = petID;
-	}
-
-	
+	//getter & setter
 	public String getUserId() {
 		return userId;
 	}
-
-	public void setUserId(String userId) {
+	public void setUserID(String userId) {
 		this.userId = userId;
 	}
-
-	public String getPassword() {
-		return password;
+	public String getuserPw() {
+		return userPw;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public void setuserPw(String userPw) {
+		this.userPw = userPw;
 	}
-
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getPhone() {
-		return phone;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-
-	public int getCommId() {
-		return commId;
+	public String getUserBirth() {
+		return userBirth;
 	}
-
-	public void setCommId(int commId) {
-		this.commId = commId;
+	public void setUserBirth(String userBirth) {
+		this.userBirth = userBirth;
 	}
-
-	public String getCommName() {
-		return commName;
+	public String getPetId() {
+		return petId;
 	}
-
-	public void setCommName(String commName) {
-		this.commName = commName;
+	public void setPetId(String petId) {
+		this.petId = petId;
+	}
+	public int getComm_num() {
+		return comm_num;
+	}
+	public void setComm_num(int comm_num) {
+		this.comm_num = comm_num;
 	}
 
 	
-	/* 비밀번호 검사 */
-	public boolean matchPassword(String password) {
-		if (password == null) {
+	/* 비밀번호 검사 (사용 여부 아직 모름) */
+	public boolean matchUserPw(String userPw) {
+		if (userPw == null) {
 			return false;
 		}
-		return this.password.equals(password);
+		return this.userPw.equals(userPw);
 	}
 	
 	public boolean isSameUser(String userid) {
@@ -159,7 +113,8 @@ public class UserDto {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + ", phone="
-				+ phone + ", commId=" + commId + "]";
-	}	
+		return "User [userId="+ userId +", userPw="+ userPw +", name="+ userName +", userBirth="+ userBirth +", email="+ email +", phone="
+				+ phoneNumber +"gender="+ gender +"petId="+ petId +", comm_number="+ comm_num +"]";
+	}
+
 }

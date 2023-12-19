@@ -1,7 +1,5 @@
 package model;
 
-import java.util.*;
-
 public class DiaryDto {
     private String photo;   // 사진을 저장하는 필드
     private String diaryTit; // 제목을 저장하는 필드
