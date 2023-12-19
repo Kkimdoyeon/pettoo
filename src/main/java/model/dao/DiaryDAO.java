@@ -59,7 +59,8 @@ public class DiaryDAO {
 		return 0;
 	}
 	
-	//private static String UPDATE = "UPDATE DIARY SET photo=?, diaryDate=?, diaryText=?, userId=?, walkingTime=?, place=? WHERE diaryTit=?";
+	//date 값 바꾸어주니 실행됨!
+	//sql이랑 java.sql.Date 순서 맞춰줘야함. 순서 그대로 insert되기 때문에
 	//다이어리 수정
 	public int updateDiary(DiaryDto diary) throws SQLException {
 		  String sql = "UPDATE DIARY " 
