@@ -4,31 +4,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel=stylesheet href="<c:url value='/css/main.css' />" type="text/css">
 <title>PRORILE</title>
 </head>
 <body>
 <div class="front-bar">
-                    <nav>
-                        <a class="logo">
-                            <img width="280" height="100"  src="../img/logo.png"/>
-                        </a>
-                        <div class="menu">
-                        <ul>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="myPage.jsp" style="color: #647B54;">MY PAGE</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="profile.jsp">PROFILE</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="../community/list.jsp">COMMUNITY</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="../map/search.jsp">MAP</a>
-                            </li>
-                        </ul>
-                        </div>
-                    </nav>
+	<nav>
+	    <a class="logo">
+	        <img width="280" height="100"  src="<c:url value='/images/logo.png' />"/>
+	    </a>
+	    <div class="menu">
+	    <ul>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/user/myPage/page' />">MY PAGE</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/user/profile/page' />" style="color: #647B54;">PROFILE</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/community/list/page' />">COMMUNITY</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/map/search/page' />">MAP</a>
+	        </li>
+	    </ul>
+	    </div>
+	</nav>
 </div>
 <div class="myProfile">
 <form name="myForm" action="profile.jsp" method="POST">

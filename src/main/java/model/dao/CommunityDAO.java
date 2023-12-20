@@ -156,7 +156,7 @@ public class CommunityDAO {
 		return false;
 	}
 	
-	// 주어진 id에 해당하는 커뮤니티 정보를 데이터베이스에서 찾아 커뮤니티 도메인 클레스에 저장하여 반환
+	// 주어진 동아리 번호에 해당하는 커뮤니티 정보를 데이터베이스에서 찾아 커뮤니티 도메인 클레스에 저장하여 반환
 	public CommunityDto findCommunity(int comm_num) throws SQLException {
 		String sql = "SELECT comm_title, comm_text, comm_date, comm_memberlimit, comm_leader "
 					+ "FROM community "

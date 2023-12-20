@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel=stylesheet href="<c:url value='../css/main.css' />" type="text/css">
+<link rel=stylesheet href="<c:url value='/css/main.css' />" type="text/css">
 <title>MY PAGE</title>
 <style>
 	
@@ -100,38 +100,46 @@
             font-weight: 600;
             cursor: pointer;
         }
+        h1 {  font-family: 'Questrial', sans-serif;  }
+        h3 {  font-family: 'Questrial', sans-serif;  }
+        h4 {  font-family: 'Questrial', sans-serif;  }
 
 </style>
 
-   
+<script src="calendar.js"></script>   
 </head>
 <body>
 <div class="front-bar">
-                    <nav>
-                        <a class="logo">
-                            <img width="280" height="100"  src="../img/logo.png"/>
-                        </a>
-                        <div class="menu">
-                        <ul>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="myPage.jsp" style="color: #647B54;">MY PAGE</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="profile.jsp">PROFILE</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="../community/list.jsp">COMMUNITY</a>
-                            </li>
-                            <li class="sc-76e69317-0 kvRpqN nav-menu">
-                                <a href="../map/search.jsp">MAP</a>
-                            </li>
-                        </ul>
-                        </div>
-                    </nav>
+	<nav>
+	    <a class="logo">
+	        <img width="280" height="100"  src="<c:url value='/images/logo.png' />"/>
+	    </a>
+	    <div class="menu">
+	    <ul>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/user/myPage/page' />" style="color: #647B54;">MY PAGE</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/user/profile/page' />">PROFILE</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/community/list/page' />">COMMUNITY</a>
+	        </li>
+	        <li class="sc-76e69317-0 kvRpqN nav-menu">
+	            <a href="<c:url value='/map/search/page' />">MAP</a>
+	        </li>
+	    </ul>
+	    </div>
+	</nav>
 </div>
 <div class="content">
 	<div class="profile">
-		<img src="../img/profile.png">
+		<h1 align="center">닉네임</h1>
+		<h3 align="center">소속 커뮤니티</h3>
+		<h3 align="center">TAKE A WALK WITH</h3>
+		<img src="<c:url value='/images/profile.png' />" alt="이미지">
+		<h3 align="center">순이</h3>
+		<h4 align="center">3KG  |  20CM  |  W</h4>		
 	</div>
 	<div class="right">
 		<div class="calendar-wrap">
@@ -166,6 +174,9 @@
     	</div>
     </div>
 </div>
+<br>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 </body>
 	 <script>
         window.onload = function () { buildCalendar(); }    // 웹 페이지가 로드되면 buildCalendar 실행

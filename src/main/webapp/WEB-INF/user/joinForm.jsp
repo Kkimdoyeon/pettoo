@@ -73,12 +73,12 @@ function userCreate() {
 }
 function goBack() {
     window.location.href = "<c:url value='/user/login/form'/>";
-  }
+}
 </script>
 </head>
 
 <body>
-<form name="joinForm" action="<c:url value='/user/login/form' />" method="POST">
+<form name="joinForm" action="<c:url value='/user/register' />" method="POST">
 <table>
 	<tr>
 		<td height="100" colspan=2><img src="<c:url value='/images/logo.png' />" width="300" height="100" alt="로고" /></td>
