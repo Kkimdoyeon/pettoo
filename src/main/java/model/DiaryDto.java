@@ -1,34 +1,20 @@
 package model;
 
-import java.util.*;
-
 public class DiaryDto {
-    private byte[] photo;   // 사진을 저장하는 필드
+    private String photo;   // 사진을 저장하는 필드
     private String diaryTit; // 제목을 저장하는 필드
-    private Date date;       // 날짜를 저장하는 필드
+    private String diaryDate;       // 날짜를 저장하는 필드
     private String diaryText; // 긴 텍스트를 저장하는 필드
     private String userId;      // 작성자 id를 저장하는 필드
     private int walkingTime;
     private String place;
 
-    public String getPlace() {
-		return place;
-	}
-	public void setPlace(String place) {
-		this.place = place;
-	}
-	public int getWalkingTime() {
-		return walkingTime;
-	}
-	public void setWalkingTime(int walkingTime) {
-		this.walkingTime = walkingTime;
-	}
 	// 생성자
-    public DiaryDto() {}
-    public DiaryDto(byte[] photo, String diaryTit, Date date, String diaryText, String userId, int walkingTime, String place) {
+    public DiaryDto() {};
+    public DiaryDto(String photo, String diaryTit, String diaryDate, String diaryText, String userId, int walkingTime, String place) {
         this.photo = photo;
         this.diaryTit = diaryTit;
-        this.date = date;
+        this.diaryDate = diaryDate;
         this.diaryText = diaryText;
         this.userId = userId;
         this.walkingTime = walkingTime;
@@ -36,7 +22,7 @@ public class DiaryDto {
     }
 
     // Getter 메서드
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
@@ -44,8 +30,8 @@ public class DiaryDto {
         return diaryTit;
     }
 
-    public Date getDate() {
-        return date;
+    public String getDiaryDate() {
+        return diaryDate;
     }
 
     public String getDiaryText() {
@@ -56,8 +42,16 @@ public class DiaryDto {
         return userId;
     }
 
+	public int getWalkingTime() {
+		return walkingTime;
+	}
+	
+    public String getPlace() {
+		return place;
+	}
+    
     // Setter 메서드
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
@@ -65,8 +59,8 @@ public class DiaryDto {
         this.diaryTit = diaryTit;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDiaryDate(String diaryDate) {
+        this.diaryDate = diaryDate;
     }
 
     public void setDiaryText(String diaryText) {
@@ -77,15 +71,25 @@ public class DiaryDto {
         this.userId = userId;
     }
 
+	public void setWalkingTime(int walkingTime) {
+		this.walkingTime = walkingTime;
+	}
+	
+	public void setPlace(String place) {
+		this.place = place;
+	}
+	
     // toString 메서드
     @Override
     public String toString() {
         return "Diary{" +
-                "photo=" + Arrays.toString(photo) +
+                "photo=" + photo +
                 ", diaryTit='" + diaryTit + '\'' +
-                ", date=" + date +
+                ", diaryDate=" + diaryDate +
                 ", diaryText='" + diaryText + '\'' +
                 ", userId=" + userId +
+                ", walkingTime=" + walkingTime + '\'' +
+                ", place=" + place + 
                 '}';
     }
 }

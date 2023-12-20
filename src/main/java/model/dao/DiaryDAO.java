@@ -1,82 +1,181 @@
 package model.dao;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.*;
-
-import model.DiaryDto.*;
+<<<<<<< HEAD
+import java.util.*;
 import model.DiaryDto;
 import model.dao.JDBCUtil;
+=======
+import model.DiaryDto;
+>>>>>>> 691b101fb94b6b1219617deffd4e2a30cf099119
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 public class DiaryDAO {
 	private JDBCUtil jdbcUtil = null;
+	private Connection conn;
+	private PreparedStatement stmt;
+	private ResultSet rs;
 	
 	public DiaryDAO() {			
-		jdbcUtil = new JDBCUtil();
+		jdbcUtil = new JDBCUtil();	// JDBCUtil 객체 생성
 	}
-	
-	//Diary 기본 정보를 포함하는 query 문
-	private static String query = "SELECT DIARY.D_TITLE, " +
-	         "DIARY.PHOTO, " +
-	         "DIARY.DATE, " +
-	         "DIARY.WALKINGTIME, " +
-	         "DIARY.D_TEXT, " +
-	         "DIARY.USERID, " +
-	         "DIARY.PLACE ";
-	
-	//해당 userId의 diary 를 리스트로 반환
-	public List<DiaryDto> getDiaryListByUserId(int userId) {
-		String allQuery = query + ", " + "FROM Diary WHERE userId = ?";
-			
-		Object[] param = new Object[] {userId};
-		jdbcUtil.setSqlAndParameters(allQuery, param);
+			   	
+	// diary 테이블에 새로운 다이어리 생성
+	public int createDiary(DiaryDto diary) throws SQLException {
+		String sql = "INSERT INTO DIARY VALUES (?, ?, ?, ?, ?, ?, ?)";
+		Object[] param = new Object[] {diary.getPhoto(), diary.getDiaryTit(), diary.getDiaryDate(),
+				diary.getDiaryText(), diary.getUserId(), diary.getWalkingTime(), diary.getPlace()};
 		
-		try { 
-			ResultSet rs = jdbcUtil.executeQuery();		
-			List<DiaryDto> list = new ArrayList<DiaryDto>();
-			while (rs.next()) {	
-				DiaryDto dto = new DiaryDto();		// 하나의 StudentDTO 객체 생성 후 정보 설정
-				dto.setPhoto(rs.getBytes("PHOTO"));
-				dto.setDiaryTit(rs.getString("D_TITLE"));
-				dto.setDate(rs.getDate("DATE"));
-				dto.setWalkingTime(rs.getInt("WALKINGTIME"));
-				dto.setDiaryText(rs.getString("D_TEXT"));
-				dto.setUserId(rs.getString("USERID"));
-				dto.setPlace(rs.getString("PLACE"));
-				list.add(dto);		// list 객체에 정보를 설정한 StudentDTO 객체 저장
-			}
-			return list;		// 학생정보를 저장한 dto 들의 목록을 반환
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			jdbcUtil.close();	// ResultSet, PreparedStatement, Connection 반환
-		}		
-		return null;	
-	}
-
-	//Diary 객체에 담겨있는 일기장 정보를 기반으로 일기장 정보를 Diary table에 삽입하는 메소드
-	public int insertDiary(DiaryDto dto) {
-		int result = 0;
-		String insertQuery = "INSERT INTO DIARY (D_TITLE, PHOTO, DATE, WALKINGTIME, D_TEXT, USERID, PLACE) " +
-				 "VALUES (?, ?, ?, ?, ?, ?, ?) ";
-		Object[] param = new Object[] {dto.getPlace(), dto.getWalkingTime(), 
-				dto.getPhoto(), dto.getDiaryTit(), dto.getDate(), dto.getDiaryText(), dto.getUserId()};
-		jdbcUtil.setSqlAndParameters(insertQuery, param);
+		jdbcUtil.setSqlAndParameters(sql, param);	// JDBCUtil 에 insert문과 매개 변수 설정
 		
-		try {				
-			result = jdbcUtil.executeUpdate();		// insert 문 실행
-			System.out.println(dto.getUserId() + "님의 "+ dto.getDate() + "의 일기가 삽입되었습니다.");
-		} catch (SQLException ex) {
-			System.out.println("입력오류 발생!!!");
-			if (ex.getErrorCode() == 1)
-				System.out.println("동일한 학생정보가 이미 존재합니다."); 
+		try {	
+			int result = jdbcUtil.executeUpdate();	// insert 문 실행
+			return result;
 		} catch (Exception ex) {
 			jdbcUtil.rollback();
 			ex.printStackTrace();
 		} finally {		
 			jdbcUtil.commit();
-			jdbcUtil.close();		// ResultSet, PreparedStatement, Connection 반환
+			jdbcUtil.close();	// resource 반환
 		}		
-		return result;
+		return 0;
+<<<<<<< HEAD
+=======
 	}
+	
+	//다이어리 삭제
+	public int deleteDiary(String diaryTit) throws SQLException {
+		String sql = "DELETE FROM DIARY WHERE diaryTit=?";
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {diaryTit}); //JDBCUtil에 delete문과 매개 변수 설정
+		
+		try {				
+			int result = jdbcUtil.executeUpdate();	// delete 문 실행
+			return result;
+		} catch (Exception ex) {
+			jdbcUtil.rollback();
+			ex.printStackTrace();
+		}
+		finally {
+			jdbcUtil.commit();
+			jdbcUtil.close();	// resource 반환
+		}		
+		return 0;
+	}
+	
+	//date 값 바꾸어주니 실행됨!
+	//sql이랑 java.sql.Date 순서 맞춰줘야함. 순서 그대로 insert되기 때문에
+	//다이어리 수정
+	public int updateDiary(DiaryDto diary) throws SQLException {
+		  String sql = "UPDATE DIARY " 
+		       + "SET photo=?, diaryDate=?, diaryText=?, userId=?, walkingTime=?, place=?"
+		       + "WHERE diaryTit=?";
+		  
+		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd");  // 주의: 월은 대문자 MM, 분은 소문자 mm
+          Date utilDate = null;
+		try {
+			utilDate = df.parse(diary.getDiaryDate());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}            // String --> java.util.Date 변환
+          
+          
+		  Object[] param = new Object[] {diary.getPhoto(), 
+				  new java.sql.Date(utilDate.getTime()), diary.getDiaryText(), diary.getUserId(), diary.getWalkingTime(), diary.getPlace(), diary.getDiaryTit()};
+
+		  jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil에 update문과 매개 변수 설정
+		         
+		      try {            
+		          int result = jdbcUtil.executeUpdate();   // update 문 실행
+		         return result;
+		      } catch (Exception ex) {
+		         jdbcUtil.rollback();
+		         ex.printStackTrace();
+		      }
+		      finally {
+		    	 System.out.println("수정 완료");
+		         jdbcUtil.commit();
+		         jdbcUtil.close();   // resource 반환
+		      }      
+		      return 0;
+		   }
+
+	public boolean existingUser(String diaryTit) {
+		String sql = "SELECT count(*) FROM USERINFO WHERE userid=?";      
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {diaryTit});	// JDBCUtil에 query문과 매개 변수 설정
+
+		try {
+			ResultSet rs = jdbcUtil.executeQuery();		// query 실행
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				return (count == 1 ? true : false);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			jdbcUtil.close();		// resource 반환
+		}
+		return false;
+>>>>>>> 691b101fb94b6b1219617deffd4e2a30cf099119
+	}
+	
+	//다이어리 삭제
+	public int deleteDiary(String diaryTit) throws SQLException {
+		String sql = "DELETE FROM DIARY WHERE diaryTit=?";
+		jdbcUtil.setSqlAndParameters(sql, new Object[] {diaryTit}); //JDBCUtil에 delete문과 매개 변수 설정
+		
+		try {				
+			int result = jdbcUtil.executeUpdate();	// delete 문 실행
+			return result;
+		} catch (Exception ex) {
+			jdbcUtil.rollback();
+			ex.printStackTrace();
+		}
+		finally {
+			jdbcUtil.commit();
+			jdbcUtil.close();	// resource 반환
+		}		
+		return 0;
+	}
+	
+	//date 값 바꾸어주니 실행됨!
+	//sql이랑 java.sql.Date 순서 맞춰줘야함. 순서 그대로 insert되기 때문에
+	//다이어리 수정
+	public int updateDiary(DiaryDto diary) throws SQLException {
+		  String sql = "UPDATE DIARY " 
+		       + "SET photo=?, diaryDate=?, diaryText=?, userId=?, walkingTime=?, place=?"
+		       + "WHERE diaryTit=?";
+		  
+		  DateFormat df = new SimpleDateFormat("yyyy/MM/dd");  // 주의: 월은 대문자 MM, 분은 소문자 mm
+          Date utilDate = null;
+		try {
+			utilDate = df.parse(diary.getDiaryDate());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}            // String --> java.util.Date 변환
+          
+          
+		  Object[] param = new Object[] {diary.getPhoto(), 
+				  new java.sql.Date(utilDate.getTime()), diary.getDiaryText(), diary.getUserId(), diary.getWalkingTime(), diary.getPlace(), diary.getDiaryTit()};
+
+		  jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil에 update문과 매개 변수 설정
+		         
+		      try {            
+		          int result = jdbcUtil.executeUpdate();   // update 문 실행
+		         return result;
+		      } catch (Exception ex) {
+		         jdbcUtil.rollback();
+		         ex.printStackTrace();
+		      }
+		      finally {
+		    	 System.out.println("수정 완료");
+		         jdbcUtil.commit();
+		         jdbcUtil.close();   // resource 반환
+		      }      
+		      return 0;
+		   }
 }

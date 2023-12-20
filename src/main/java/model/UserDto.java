@@ -100,7 +100,7 @@ public class UserDto {
 
 	
 	/* 비밀번호 검사 (사용 여부 아직 모름) */
-	public boolean matchuserPw(String userPw) {
+	public boolean matchUserPw(String userPw) {
 		if (userPw == null) {
 			return false;
 		}
